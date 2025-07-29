@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Dearest Mehar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffd1dc, #f8c8dc, #f5d0e9);
+            color: #5a3a5e;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+            display: none;
+        }
+        
+        .page.active {
+            opacity: 1;
+            transform: translateY(0);
+            display: flex;
+        }
+        
+        .page-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            color: #d44d5c;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Page 1 Styles */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23d44d5c"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+            background-size: contain;
+            opacity: 0.7;
+        }
+        
+        .welcome-text {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+        
+        .enter-button {
+            background: linear-gradient(to right, #d44d5c, #e86a78);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 2rem;
+            box-shadow: 0 5px 15px rgba(212, 77, 92, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .enter-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 77, 92, 0.6);
+        }
+        
+        /* Page 2 Styles */
+        .apology-text {
+            font-size: 1.8rem;
+            line-height: 1.8;
+            margin: 2rem 0;
+            min-height: 150px;
+            max-width: 700px;
+        }
+        
+        .heart-animation {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 2rem 0;
+        }
+        
+        .heart-piece {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23d44d5c"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+            background-size: contain;
+            opacity: 0.8;
+        }
+        
+        .heart-left {
+            left: 0;
+            top: 0;
+            clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+            transform: translateX(-20px);
+        }
+        
+        .heart-right {
+            right: 0;
+            top: 0;
+            clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+            transform: translateX(20px);
+        }
+        
+        .heart-animation.healed .heart-left,
+        .heart-animation.healed .heart-right {
+            transform: translateX(0);
+            transition: transform 2s ease;
+        }
+        
+        .buttons-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 2rem;
+            position: relative;
+        }
+        
+        .forgive-button {
+            background: linear-gradient(to right, #5cb85c, #4cae4c);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(92, 184, 92, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .forgive-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(92, 184, 92, 0.6);
+        }
+        
+        .no-button {
+            background: linear-gradient(to right, #d9534f, #c9302c);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(217, 83, 79, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        /* Page 3 Styles */
+        .petals-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23d44d5c"><path d="M12,2C8.1,2,5,5.1,5,9c0,5.3,7,13,7,13s7-7.8,7-13C19,5.1,15.9,2,12,2z M12,11.5c-1.4,0-2.5-1.1-2.5-2.5s1.1-2.5,2.5-2.5s2.5,1.1,2.5,2.5S13.4,11.5,12,11.5z"/></svg>');
+            background-size: contain;
+            opacity: 0.7;
+        }
+        
+        .couple-photo {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin: 2rem 0;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            overflow: hidden;
+        }
+        
+        .couple-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .final-message {
+            font-size: 1.6rem;
+            line-height: 1.8;
+            margin: 2rem 0;
+            max-width: 700px;
+            font-family: 'Dancing Script', cursive;
+            color: #5a3a5e;
+        }
+        
+        .credits {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 1rem;
+            color: #8a6d8f;
+        }
+        
+        /* Music Controls */
+        .music-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        
+        .music-controls i {
+            font-size: 24px;
+            color: #d44d5c;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 3rem;
+            }
+            
+            .welcome-text {
+                font-size: 1.8rem;
+            }
+            
+            .apology-text, .final-message {
+                font-size: 1.4rem;
+            }
+            
+            .heart-animation {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .couple-photo {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .welcome-text {
+                font-size: 1.5rem;
+            }
+            
+            .apology-text, .final-message {
+                font-size: 1.2rem;
+            }
+            
+            .heart-animation {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .couple-photo {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .enter-button, .forgive-button, .no-button {
+                padding: 10px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Music Controls -->
+    <div class="music-controls" id="musicToggle">
+        <i>🎵</i>
+    </div>
+    
+    <!-- Floating Hearts Container -->
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <!-- Page 1: Welcome Page -->
+    <div class="page active" id="page1">
+        <h1 class="page-title">For My Mehar</h1>
+        <div class="welcome-text">
+            Hi Mehar... Someone's really, really sorry...
+        </div>
+        <button class="enter-button" id="enterBtn">Read My Heart</button>
+    </div>
+    
+    <!-- Page 2: Apology Page -->
+    <div class="page" id="page2">
+        <div class="apology-text" id="apologyText"></div>
+        <div class="heart-animation" id="heartAnimation">
+            <div class="heart-piece heart-left"></div>
+            <div class="heart-piece heart-right"></div>
+        </div>
+        <div class="buttons-container">
+            <button class="forgive-button" id="yesButton">Yes, I Forgive You</button>
+            <button class="no-button" id="noButton">Not Yet</button>
+        </div>
+    </div>
+    
+    <!-- Page 3: Final Page -->
+    <div class="page" id="page3">
+        <!-- Petals Container -->
+        <div class="petals-container" id="petalsContainer"></div>
+        
+        <h1 class="page-title">My Forever Love</h1>
+        
+        <div class="couple-photo">
+    <img src="WhatsApp Image 2025-07-29 at 21.07.27_28366812.jpg" alt="Mehar and Ibrar">
+</div>
+
+        
+        <div class="final-message">
+            "Main maanta hoon main galat tha... par tumhare bina sab kuch adhura hai Mehar...
+            Tum hi ho, tum hi ho meri har khushi ka sabab…"
+        </div>
+    </div>
+    
+    <!-- Credits -->
+    <div class="credits">
+        Made with love by Ibrar for Mehar 💞
+    </div>
+    
+    <!-- Audio Player -->
+    <audio id="bgMusic" loop>
+        <source src="lo.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const pages = {
+                page1: document.getElementById('page1'),
+                page2: document.getElementById('page2'),
+                page3: document.getElementById('page3')
+            };
+            
+            const enterBtn = document.getElementById('enterBtn');
+            const yesButton = document.getElementById('yesButton');
+            const noButton = document.getElementById('noButton');
+            const apologyText = document.getElementById('apologyText');
+            const heartAnimation = document.getElementById('heartAnimation');
+            const bgMusic = document.getElementById('bgMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            const heartsContainer = document.getElementById('heartsContainer');
+            const petalsContainer = document.getElementById('petalsContainer');
+            
+            // Apology message with typing effect
+            const apologyMessage = "I know I messed up… But you're my everything. Without you, nothing feels right…";
+            
+            // Initialize floating hearts
+            createFloatingHearts(30);
+            
+            // Music controls
+            let musicPlaying = true;
+            
+            // Try to play music automatically (may be blocked by browsers)
+            setTimeout(() => {
+                bgMusic.play().catch(e => console.log("Autoplay blocked:", e));
+            }, 1000);
+            
+            musicToggle.addEventListener('click', () => {
+                if (musicPlaying) {
+                    bgMusic.pause();
+                    musicToggle.innerHTML = '<i>🔇</i>';
+                } else {
+                    bgMusic.play();
+                    musicToggle.innerHTML = '<i>🎵</i>';
+                }
+                musicPlaying = !musicPlaying;
+            });
+            
+            // Enter button to go to apology page
+            enterBtn.addEventListener('click', () => {
+                switchPage(pages.page1, pages.page2);
+                
+                // Start typing effect after a short delay
+                setTimeout(() => {
+                    typeWriter(apologyMessage, apologyText, 50, () => {
+                        // After typing completes, heal the heart
+                        heartAnimation.classList.add('healed');
+                    });
+                }, 500);
+            });
+            
+            // Yes button to go to final page
+            yesButton.addEventListener('click', () => {
+                switchPage(pages.page2, pages.page3);
+                createFallingPetals(50);
+            });
+            
+            // No button runs away
+            noButton.addEventListener('click', function() {
+                // Move button to random position
+                const maxX = window.innerWidth - this.offsetWidth;
+                const maxY = window.innerHeight - this.offsetHeight;
+                
+                const randomX = Math.floor(Math.random() * maxX);
+                const randomY = Math.floor(Math.random() * maxY);
+                
+                this.style.position = 'absolute';
+                this.style.left = `${randomX}px`;
+                this.style.top = `${randomY}px`;
+                
+                // Change button text for fun
+                const messages = ["Please?", "I'm really sorry", "Try again?", "Forgive me?", "You're my everything"];
+                this.textContent = messages[Math.floor(Math.random() * messages.length)];
+            });
+            
+            // Helper function to switch pages
+            function switchPage(fromPage, toPage) {
+                fromPage.classList.remove('active');
+                setTimeout(() => {
+                    toPage.classList.add('active');
+                }, 500);
+            }
+            
+            // Typewriter effect
+            function typeWriter(text, element, speed, callback) {
+                let i = 0;
+                element.innerHTML = '';
+                
+                function type() {
+                    if (i < text.length) {
+                        element.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    } else if (callback) {
+                        callback();
+                    }
+                }
+                
+                type();
+            }
+            
+            // Create floating hearts
+            function createFloatingHearts(count) {
+                for (let i = 0; i < count; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    
+                    // Random position
+                    heart.style.left = `${Math.random() * 100}vw`;
+                    heart.style.top = `${Math.random() * 100}vh`;
+                    
+                    // Random size
+                    const size = 10 + Math.random() * 20;
+                    heart.style.width = `${size}px`;
+                    heart.style.height = `${size}px`;
+                    
+                    // Random animation
+                    const duration = 10 + Math.random() * 20;
+                    const delay = Math.random() * 5;
+                    heart.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                    
+                    heartsContainer.appendChild(heart);
+                }
+                
+                // Add animation to styles
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @keyframes float {
+                        0% {
+                            transform: translateY(0) translateX(0) rotate(0deg);
+                            opacity: 0.7;
+                        }
+                        50% {
+                            transform: translateY(-100px) translateX(20px) rotate(180deg);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translateY(-200px) translateX(0) rotate(360deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Create falling petals
+            function createFallingPetals(count) {
+                for (let i = 0; i < count; i++) {
+                    const petal = document.createElement('div');
+                    petal.classList.add('petal');
+                    
+                    // Random position
+                    petal.style.left = `${Math.random() * 100}vw`;
+                    
+                    // Random size
+                    const size = 15 + Math.random() * 15;
+                    petal.style.width = `${size}px`;
+                    petal.style.height = `${size}px`;
+                    
+                    // Random animation
+                    const duration = 10 + Math.random() * 15;
+                    const delay = Math.random() * 5;
+                    petal.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+                    
+                    petalsContainer.appendChild(petal);
+                }
+                
+                // Add animation to styles
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @keyframes fall {
+                        0% {
+                            transform: translateY(-50px) rotate(0deg);
+                            opacity: 0.7;
+                        }
+                        10% {
+                            transform: translateX(${Math.random() * 20 - 10}px);
+                        }
+                        20% {
+                            transform: translateX(${Math.random() * 20 - 10}px);
+                        }
+                        30% {
+                            transform: translateX(${Math.random() * 20 - 10}px);
+                        }
+                        50% {
+                            transform: translateX(${Math.random() * 20 - 10}px);
+                        }
+                        70% {
+                            transform: translateX(${Math.random() * 20 - 10}px);
+                        }
+                        100% {
+                            transform: translateY(100vh) rotate(360deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        });
+    </script>
+</body>
+</html>
